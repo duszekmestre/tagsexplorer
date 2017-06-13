@@ -1,9 +1,15 @@
 {
     "name": "tagsexplorer",
     "displayName": "Tags Explorer",
-    "description": "Explore and search tags in your workspace",
-    "version": "0.0.1-alpha",
+    "description": "Explore and search tags in your files.",
+    "version": "0.0.1",
     "publisher": "duszekmestre",
+    "repository": {
+        "url": "https://github.com/duszekmestre/tagsexplorer.git"
+    },
+    "bugs": {
+        "url": "https://github.com/duszekmestre/tagsexplorer/issues"
+    },
     "engines": {
         "vscode": "^1.12.0"
     },
