@@ -8,6 +8,7 @@ import { TagsProvider } from './TagsProvider';
 export class TagsLogic {
     private _statusBar: StatusBarItem;
     private _disposable: Disposable;
+    private tagsProvider: TagsProvider;
 
     constructor(private tagsExplorer : TagsExplorer,
         private tagsDecorator : TagsDecorator) {
@@ -19,13 +20,18 @@ export class TagsLogic {
         this._statusBar.command = "extension.fileTags";
         disposables.push(this._statusBar);
 
+        this.tagsProvider = new TagsProvider();
+        window.registerTreeDataProvider('fileTags', this.tagsProvider);
+
         let fileTagsCommand = commands.registerCommand('extension.fileTags', () => {
-            window.showInformationMessage('Hello World!');
+            this.editorChanged();
         });
         disposables.push(fileTagsCommand);
 
-        let tagsProvider = new TagsProvider();
-        //window.registerTreeDataProvider('fileTags', tagsProvider);
+        let goToTagCommand = commands.registerCommand('extension.goToTag', (...args) => {
+            this.tagsDecorator.highlightTags(args);
+        });
+        disposables.push(goToTagCommand);
 
         this._disposable = Disposable.from(...disposables);  
     }
@@ -42,6 +48,8 @@ export class TagsLogic {
         this._statusBar.text = `$(tag) Tags count: ${fileTags.length}`;
 
         this._statusBar.show();
+        
+        this.tagsProvider.refresh(fileTags);
     }
 
     private isTag(tag) : boolean {

@@ -4,6 +4,7 @@
     "description": "Explore and search tags in your files.",
     "version": "0.0.1",
     "publisher": "duszekmestre",
+    "license": "MIT",
     "repository": {
         "url": "https://github.com/duszekmestre/tagsexplorer.git"
     },
@@ -28,7 +29,7 @@
     "contributes": {
         "commands": [{
             "command": "extension.fileTags",
-            "title": "List file tags",
+            "title": "Refresh file tags",
             "icon": "tag"
         }],
         "views": {
@@ -46,7 +47,7 @@
         "test": "node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^2.0.3",
+        "typescript": "^2.4.0",
         "vscode": "^1.0.0",
         "mocha": "^2.3.3",
         "@types/node": "^6.0.40",

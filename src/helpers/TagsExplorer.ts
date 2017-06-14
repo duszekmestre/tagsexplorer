@@ -38,4 +38,13 @@ export class TagsExplorer {
 
         return this.HashTags.filter(x => x.FileName === fileName);
     }
+
+    getLoadedTags(editor: TextEditor) : HashTag[] {
+        if (editor) {
+            let fileName = editor.document.fileName
+            return this.HashTags.filter(x => x.FileName === fileName);    
+        }
+        
+        return [];
+    }
 }

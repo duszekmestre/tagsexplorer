@@ -28,5 +28,34 @@ export class TagsDecorator {
          });    
         
         editor.setDecorations(defaultTagDecorator, tagsPositions);   
+        editor.setDecorations(selectedTagDecorator, []);
+    }
+
+    highlightTags(highlightedTags: HashTag[]) {
+        let editor = window.activeTextEditor;
+        let doc = editor.document;
+
+        if (highlightedTags.length === 1) {
+            this.resolveLine(editor, highlightedTags[0]);
+        }
+
+        
+        let tagsPositions = highlightedTags.map(tag => {
+            let startPositon = doc.positionAt(tag.Start);
+            let endPositon = doc.positionAt(tag.End);
+
+            const decoration = { range: new Range(startPositon, endPositon) };
+
+            return decoration;
+        });
+
+        editor.setDecorations(selectedTagDecorator, tagsPositions);           
+    }
+
+    private resolveLine(editor: TextEditor, tag: HashTag) {
+        let startPositon = editor.document.positionAt(tag.Start);
+        let endPositon = editor.document.positionAt(tag.End);
+
+        editor.revealRange(new Range(startPositon, endPositon));
     }
 }
