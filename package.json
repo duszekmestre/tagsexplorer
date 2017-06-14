@@ -2,7 +2,7 @@
     "name": "tagsexplorer",
     "displayName": "Tags Explorer",
     "description": "Explore and search tags in your files.",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "publisher": "duszekmestre",
     "license": "MIT",
     "repository": {
