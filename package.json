@@ -11,7 +11,7 @@
         "url": "https://github.com/duszekmestre/tagsexplorer/issues"
     },
     "engines": {
-        "vscode": "^1.12.0"
+        "vscode": "^1.13.0"
     },
     "categories": [
         "Other"
@@ -25,6 +25,19 @@
     "activationEvents": [
         "*"
     ],
+    "contributes": {
+        "commands": [{
+            "command": "extension.fileTags",
+            "title": "List file tags",
+            "icon": "tag"
+        }],
+        "views": {
+            "explorer": [{
+                "id": "fileTags",
+                "name": "File tags"
+            }]
+        }
+    },
     "main": "./out/src/extension",
     "scripts": {
         "vscode:prepublish": "tsc -p ./",
