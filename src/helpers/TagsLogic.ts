@@ -8,10 +8,10 @@ import { TagsProvider } from './TagsProvider';
 export class TagsLogic {
     private _statusBar: StatusBarItem;
     private _disposable: Disposable;
-    private tagsProvider: TagsProvider;
+    readonly tagsProvider: TagsProvider;
 
-    constructor(private tagsExplorer : TagsExplorer,
-        private tagsDecorator : TagsDecorator) {
+    constructor(readonly tagsExplorer : TagsExplorer,
+        readonly tagsDecorator : TagsDecorator) {
 
         let disposables: Disposable[] = [];
 
@@ -28,6 +28,11 @@ export class TagsLogic {
         });
         disposables.push(fileTagsCommand);
 
+        let workspaceTagsCommand = commands.registerCommand('extension.workspaceTags', () => {
+            this.workspaceChanged();
+        });
+        disposables.push(workspaceTagsCommand);
+
         let goToTagCommand = commands.registerCommand('extension.goToTag', (...args) => {
             this.tagsDecorator.highlightTags(args);
         });
@@ -43,17 +48,24 @@ export class TagsLogic {
             return;
         }
 
-        var fileTags = this.tagsExplorer.retrieveTags(editor);
+        var fileTags = this.tagsExplorer.reloadEditorTags(editor);
         this.tagsDecorator.decorateTags(editor, fileTags);
         this._statusBar.text = `$(tag) Tags count: ${fileTags.length}`;
 
         this._statusBar.show();
         
-        this.tagsProvider.refresh(fileTags);
+        this.tagsProvider.refresh(this.tagsExplorer.HashTags);
     }
 
-    private isTag(tag) : boolean {
-        return tag.startsWith("#") && tag.replace(/#/g, "").length > 0;
+    public workspaceChanged() {
+        this.tagsExplorer.reloadWorkspaceTags().then((tags) => {
+            this.tagsProvider.refresh(tags);
+            if (window.activeTextEditor) {
+                this.tagsDecorator.decorateTags(
+                    window.activeTextEditor, 
+                    tags.filter(tag => tag.FileName === window.activeTextEditor.document.fileName));
+            }
+        });
     }
 
     dispose() {

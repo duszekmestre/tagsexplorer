@@ -15,3 +15,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Changed
 - Tags counter move to the right side of status bar
 - Several code improvements
+
+## [0.0.4] - 2017-06-15
+### Added
+- Refreshing tags on every workspace and file change
+- Loading tags from all workspace (files in opened folder)
+- Add command "Refresh workspace tags"
+- Go to tag even to closed file
+
+### Changed
+- File tags explorer changed to workspace explorer
+
+### Known bugs
+- On bug workspaces VSCode can freeze or even crash :(

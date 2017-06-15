@@ -2,7 +2,7 @@
     "name": "tagsexplorer",
     "displayName": "Tags Explorer",
     "description": "Explore and search tags in your files.",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "publisher": "duszekmestre",
     "license": "MIT",
     "repository": {
@@ -31,11 +31,15 @@
             "command": "extension.fileTags",
             "title": "Refresh file tags",
             "icon": "tag"
+        }, {
+            "command": "extension.workspaceTags",
+            "title": "Refresh workspace tags",
+            "icon": "tag"
         }],
         "views": {
             "explorer": [{
                 "id": "fileTags",
-                "name": "File tags"
+                "name": "Workspace tags"
             }]
         }
     },

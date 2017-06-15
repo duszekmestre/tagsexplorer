@@ -30,9 +30,16 @@ class TagsController {
         vscode.window.onDidChangeTextEditorSelection(this._onEvent, this, subscriptions);
         vscode.window.onDidChangeActiveTextEditor(this._onEvent, this, subscriptions);
 
-        this.tagsLogic.editorChanged();
+        vscode.workspace.onDidCloseTextDocument(this.untitledRemoved, this, subscriptions);
 
-        this._disposable = vscode.Disposable.from(...subscriptions);                
+        let watcher = vscode.workspace.createFileSystemWatcher("**/*", false, false, false);
+        watcher.onDidCreate(this.fileChanged, this, subscriptions);
+        watcher.onDidChange(this.fileChanged, this, subscriptions);
+        watcher.onDidDelete(this.fileRemoved, this, subscriptions);
+
+        this.tagsLogic.workspaceChanged();
+
+        this._disposable = vscode.Disposable.from(...subscriptions);
     }
 
     dispose() {
@@ -41,5 +48,23 @@ class TagsController {
 
     private _onEvent() {
         this.tagsLogic.editorChanged();
+    }
+
+    private fileChanged(uri: vscode.Uri) {
+        this.tagsLogic.tagsExplorer.reloadUriTags(uri).then(tags => {
+            this.tagsLogic.tagsProvider.refresh(tags);
+        });
+    }
+
+    private fileRemoved(uri: vscode.Uri) {
+        let tags = this.tagsLogic.tagsExplorer.removeUriTags(uri);
+        this.tagsLogic.tagsProvider.refresh(tags);
+    }
+
+    private untitledRemoved(file: vscode.TextDocument) {
+        if (file.uri.scheme === "untitled") {
+            let tags = this.tagsLogic.tagsExplorer.removeUriTags(file.uri);
+            this.tagsLogic.tagsProvider.refresh(tags);
+        }
     }
 }
