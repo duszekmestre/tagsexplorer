@@ -28,3 +28,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Known bugs
 - On bug workspaces VSCode can freeze or even crash :(
+
+## [0.0.5] - 2017-06-15
+### Added
+- List of text files extensions
+
+### Changed
+- Now check only text files (based on extension) for tags
+
+### Known bugs
+- On bug workspaces VSCode can freeze or even crash :( - Please don't use this version on every day work

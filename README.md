@@ -19,15 +19,15 @@ https://github.com/duszekmestre/tagsexplorer/issues
 
 Last 3 entries from changelog:
 
-## [0.0.3] - 2017-06-14
+## [0.0.5] - 2017-06-15
 ### Added
-- File tags explorer
-- Possibility to select tag (or tags) and move to selected tag
-- Refreshing tags in current file by pressing tags counter or using command "Refresh file tags"
+- List of text files extensions
 
 ### Changed
-- Tags counter move to the right side of status bar
-- Several code improvements
+- Now check only text files (based on extension) for tags
+
+### Known bugs
+- On bug workspaces VSCode can freeze or even crash :( - Please don't use this version on every day work
 
 ## [0.0.4] - 2017-06-15
 ### Added
@@ -42,3 +42,13 @@ Last 3 entries from changelog:
 ### Known bugs
 - On bug workspaces VSCode can freeze or even crash :(
     - Please don't use this version on every day
+
+## [0.0.3] - 2017-06-14
+### Added
+- File tags explorer
+- Possibility to select tag (or tags) and move to selected tag
+- Refreshing tags in current file by pressing tags counter or using command "Refresh file tags"
+
+### Changed
+- Tags counter move to the right side of status bar
+- Several code improvements

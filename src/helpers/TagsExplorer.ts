@@ -2,32 +2,32 @@ import { workspace, Uri, TextEditor, TextDocument } from 'vscode';
 
 import { HashTag } from './hashtag';
 
+let supportedExtensions = require('supportedExtensions');
+
 export class TagsExplorer {
     HashTags: HashTag[] = [];
 
-    removeUriTags(uri: Uri) : HashTag[] {
+    removeUriTags(uri: Uri): HashTag[] {
         this.HashTags = this.HashTags
             .filter(tag => tag.FileName !== uri.fsPath);
 
         return this.HashTags;
     }
 
-    reloadFileTags(path: string) : Thenable<HashTag[]> {
+    reloadFileTags(path: string): Thenable<HashTag[]> {
         var uri = Uri.parse(path);
         return this.reloadUriTags(uri);
     }
 
-    reloadUriTags(uri: Uri) : Thenable<HashTag[]> {
+    reloadUriTags(uri: Uri): Thenable<HashTag[]> {
         return new Promise<HashTag[]>(resolve => {
-            workspace.openTextDocument(uri).then(doc => {
+            this.openTextDocument(uri.fsPath).then(doc => {
                 if (doc) {
                     this.HashTags = this.HashTags.filter(x => x.FileName !== doc.fileName);
                     let docTags = this.getTagsFromDocument(doc);
                     this.HashTags.push(...docTags);
                 }
 
-                resolve(this.HashTags);
-            }, (error: Error) => {
                 resolve(this.HashTags);
             });
         });
@@ -49,32 +49,50 @@ export class TagsExplorer {
             this.HashTags = [];
 
             if (workspace.rootPath) {
-                workspace.findFiles('**/*').then(workspaceFiles => {
-                    let filesCount = workspaceFiles.length;
-                    let filesProcessed = 0;
-                    workspaceFiles.forEach(file => {
-                        workspace.openTextDocument(file).then(doc => {
-                            if (doc) {
-                                let docTags = this.getTagsFromDocument(doc);
-                                this.HashTags.push(...docTags);
-                            }
-                            filesProcessed++;
-
-                            if (filesProcessed === filesCount) {
-                                resolve(this.HashTags);
-                            }
-                        }, (error: Error) => {
-                            filesProcessed++;
-
-                            if (filesProcessed === filesCount) {
-                                resolve(this.HashTags);
-                            }
+                supportedExtensions.forEach(ext => {
+                    workspace.findFiles(`**/*.${ext}`).then(workspaceFiles => {
+                        let filesCount = workspaceFiles.length;
+                        let filesProcessed = 0;
+                        workspaceFiles.forEach(file => {
+                            workspace.openTextDocument(file.fsPath).then(doc => {
+                                if (doc) {
+                                    let docTags = this.getTagsFromDocument(doc);
+                                    this.HashTags.push(...docTags);
+                                }
+                                
+                                filesProcessed++;
+                                if (filesProcessed === filesCount) {
+                                    resolve(this.HashTags);
+                                }
+                            }, (error: Error) => {
+                                console.error(error);
+                                
+                                filesProcessed++;
+                                if (filesProcessed === filesCount) {
+                                    resolve(this.HashTags);
+                                }
+                            });
                         });
                     });
                 });
+
+
             } else {
                 resolve(this.HashTags);
             }
+        });
+    }
+
+    private openTextDocument(filePath: string) {
+        return new Promise<TextDocument>(resolve => {
+            let ext = filePath.split('.').reverse()[0];
+            let isText = supportedExtensions.indexOf(ext) >= 0;
+
+            if (isText) {
+                resolve(workspace.openTextDocument(filePath));
+            }
+
+            resolve(undefined);
         });
     }
 
