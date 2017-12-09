@@ -27,7 +27,8 @@
         "*"
     ],
     "contributes": {
-        "commands": [{
+        "commands": [
+            {
                 "command": "extension.fileTags",
                 "title": "Refresh file tags",
                 "icon": "tag"
@@ -39,10 +40,12 @@
             }
         ],
         "views": {
-            "explorer": [{
-                "id": "fileTags",
-                "name": "Workspace tags"
-            }]
+            "explorer": [
+                {
+                    "id": "fileTags",
+                    "name": "Workspace tags"
+                }
+            ]
         }
     },
     "main": "./out/src/extension",

@@ -2,7 +2,7 @@ import { workspace, Uri, TextEditor, TextDocument } from 'vscode';
 
 import { HashTag } from './hashtag';
 
-let supportedExtensions = require('supportedExtensions');
+import { supportedExtensions } from "./supported";
 
 export class TagsExplorer {
     HashTags: HashTag[] = [];
